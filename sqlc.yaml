@@ -1,0 +1,11 @@
+version: "2"  # 必须为2，表示兼容sqlc v1.0+
+sql:
+  - engine: "postgresql"  # 支持postgresql/mysql/sqlite
+    database:  # 可选，指定数据库URL（用于生成时验证）
+      uri: "postgres://postgres:123456@localhost:5432/go-rss?sslmode=disable"
+    queries: "sql/query"  # 查询SQL文件路径
+    schema: "sql/schema"  # 表结构SQL文件路径
+    gen:
+      go:
+        package: "db"       # 生成代码的包名
+        out: "./internal/db"  # 生成代码输出目录
