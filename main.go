@@ -85,7 +85,6 @@ func main() {
 
     router.Mount("/v1", v1Router)
 
-
     log.Printf("Server is running on port: %s\n", port)
     log.Fatal(http.ListenAndServe(":"+port, router))
 }
