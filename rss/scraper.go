@@ -1,4 +1,4 @@
-package main
+package rss
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 //   - db: 数据库查询接口
 //   - concurrency: 并发数量
 //   - timeBetweenRequest: 请求间隔时间
-func startScraping(
+func StartScraping(
 	query *db.Queries,
 	concurrency int,
 	timeBetweenRequest time.Duration,

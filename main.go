@@ -4,41 +4,22 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
+	"github.com/djchanahcjd/go-rss/config"
 	"github.com/djchanahcjd/go-rss/handlers"
 	"github.com/djchanahcjd/go-rss/internal/db"
+	"github.com/djchanahcjd/go-rss/rss"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
+
 func main() {
-	// 测试rss功能
-	feed, error := urlToFeed("https://wagslane.dev/index.xml")
-	if error != nil {
-		log.Fatal("Error fetching feed:", error)
-	}
-	log.Println("Feed Title:", feed.Channel.Title)
+	config := config.LoadConfig()
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("PORT is not found in the environment")
-	}
-
-	dbUrl := os.Getenv("DB_URL")
-	if dbUrl == "" {
-		log.Fatal("DB_URL is not found in the environment")
-	}
-
-	conn, err := sql.Open("postgres", dbUrl)
+	conn, err := sql.Open("postgres", config.DBUrl)
 	if err != nil {
 		log.Fatal("Cannot connect to db:", err)
 	}
@@ -47,15 +28,15 @@ func main() {
 	apiCfg := handlers.ApiConfig{
 		DB: db,
 	}
-	r := init_router(apiCfg)
+	r := setupRouter(apiCfg)
 
-	go startScraping(db, 10, time.Minute)
+	go rss.StartScraping(db, 10, time.Minute)
 
-	log.Printf("Server is running on port: %s\n", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	log.Printf("Server is running on port: %s\n", config.Port)
+	log.Fatal(http.ListenAndServe(":"+config.Port, r))
 }
 
-func init_router(apiCfg handlers.ApiConfig) *chi.Mux {
+func setupRouter(apiCfg handlers.ApiConfig) *chi.Mux {
 	r := chi.NewRouter()
 	// 先设置CORS中间件
 	r.Use(cors.Handler(cors.Options{
@@ -68,6 +49,9 @@ func init_router(apiCfg handlers.ApiConfig) *chi.Mux {
 		AllowCredentials: false,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
+
+    // API 日志中间件
+	r.Use(handlers.LoggingMiddleware)
 
 	// 静态文件服务
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("frontend/static"))))
