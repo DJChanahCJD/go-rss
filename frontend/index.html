@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSS阅读器</title>
+    <!-- 通过CDN引入jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <!-- 引入轻量级UI组件库 (这里使用Semantic UI作为示例) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="ui container">
+        <!-- 顶部导航栏 -->
+        <div class="ui menu" id="navbar">
+            <div class="header item">RSS阅读器</div>
+            <a class="item" href="#" id="home-link">首页</a>
+            <a class="item" href="#" id="feeds-link">我的订阅</a>
+            <div class="right menu">
+                <div class="item" id="user-info" style="display: none;">
+                    <span id="welcome-message"></span>
+                </div>
+                <a class="item" href="#" id="login-link">登录</a>
+                <a class="item" href="#" id="register-link">注册</a>
+                <a class="item" href="#" id="logout-link" style="display: none;">退出</a>
+            </div>
+        </div>
+
+        <!-- 主要内容区 -->
+        <div class="ui segment" id="content">
+            <!-- 登录表单 -->
+            <div id="login-form" class="ui form">
+                <h2 class="ui header">用户登录</h2>
+                <div class="field">
+                    <label>用户名</label>
+                    <input type="text" id="login-username" placeholder="请输入用户名">
+                </div>
+                <div class="field">
+                    <label>密码</label>
+                    <input type="password" id="login-password" placeholder="请输入密码">
+                </div>
+                <button class="ui button primary" id="login-btn">登录</button>
+            </div>
+
+            <!-- 注册表单 -->
+            <div id="register-form" class="ui form" style="display: none;">
+                <h2 class="ui header">用户注册</h2>
+                <div class="field">
+                    <label>用户名</label>
+                    <input type="text" id="register-username" placeholder="请输入用户名">
+                </div>
+                <div class="field">
+                    <label>密码</label>
+                    <input type="password" id="register-password" placeholder="请输入密码">
+                </div>
+                <button class="ui button primary" id="register-btn">注册</button>
+            </div>
+
+            <!-- 首页内容 -->
+            <div id="home-content" style="display: none;">
+                <h2 class="ui header">最新文章</h2>
+                <div class="ui action input" style="margin-bottom: 15px;">
+                    <input type="text" id="feed-url" placeholder="输入RSS订阅源URL">
+                    <button class="ui button primary" id="add-feed-btn">添加订阅</button>
+                </div>
+                <div id="articles-container"></div>
+            </div>
+
+            <!-- 订阅源列表 -->
+            <div id="feeds-content" style="display: none;">
+                <h2 class="ui header">我的订阅源</h2>
+                <div id="feeds-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 消息提示 -->
+    <div class="ui message" id="notification" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        <p id="notification-message"></p>
+    </div>
+
+    <!-- 自定义脚本 -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
