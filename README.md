@@ -81,6 +81,7 @@ DB_URL=postgres://user:password@localhost:5432/go-rss?sslmode=disable
 
 
 ## 简易前端
+浏览器打开 `http://localhost:8080` 即可访问。
 ![简易前端截图](image.png)
 
 
