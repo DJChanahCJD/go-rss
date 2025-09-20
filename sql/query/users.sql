@@ -15,3 +15,7 @@ RETURNING *;
 -- name: GetUserByAPIKey :one
 SELECT * FROM users
 WHERE api_key = $1 LIMIT 1;
+
+-- name: GetUserByUsername :one
+SELECT * FROM users
+WHERE username = $1 LIMIT 1;

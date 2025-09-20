@@ -43,15 +43,17 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		// 获取请求信息
 		method := r.Method
 		path := r.URL.Path
+		params := r.URL.Query()
 		
 		// 处理请求
 		next.ServeHTTP(w, r)
 		
 		// 记录日志
 		log.Printf(
-			"[API] %s %s",
+			"[API] %s %s %s",
 			method,
 			path,
+			params.Encode(),
 		)
 	})
 }

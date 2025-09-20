@@ -80,10 +80,13 @@ DB_URL=postgres://user:password@localhost:5432/go-rss?sslmode=disable
 
 
 
+## 简易前端
+![简易前端截图](image.png)
+
+
+
 ## 下一步计划
 
-- 前端界面
-- 更完善的用户认证
-- RSS抓取性能优化
-- 文章搜索与阅读状态
+- 学习[feeds (github.com/gorilla/feeds)](https://pkg.go.dev/github.com/gorilla/feeds)和[gofeed (github.com/mmcdole/gofeed)](https://pkg.go.dev/github.com/mmcdole/gofeed)
+- 开发一个RSS平台，前端用AntDesignPro及其组件，后端需要有一个公共的用户中心服务，包括rss等其他服务都共用同一个用户登陆接口。使用gRPC作为跨服务调用。
 

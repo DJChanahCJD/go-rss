@@ -56,7 +56,7 @@ func scrapeFeed(wg *sync.WaitGroup, query *db.Queries, feed db.Feed) {
 		return
 	}
 
-	rssFeed, err := urlToFeed(feed.Url)
+	rssFeed, err := urlToRSSFeed(feed.Url)
 	if err != nil {
 		log.Printf("Error fetching feed from %s: %v\n", feed.Url, err)
 		return
@@ -100,5 +100,5 @@ func scrapeFeed(wg *sync.WaitGroup, query *db.Queries, feed db.Feed) {
 			continue
 		}
 	}
-	log.Printf("👀 Feed %s collected, %v posts found\n=========================\n", feed.Name, len(rssFeed.Channel.Items))
+	log.Printf("==> 👀 Feed %s collected, %v posts found", feed.Name, len(rssFeed.Channel.Items))
 }

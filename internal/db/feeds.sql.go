@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -59,19 +60,32 @@ func (q *Queries) CreateFeed(ctx context.Context, arg CreateFeedParams) (Feed, e
 }
 
 const getAllFeeds = `-- name: GetAllFeeds :many
-SELECT id, name, url, created_at, updated_at, user_id, last_fetched_at FROM feeds
-ORDER BY created_at DESC
+SELECT f.id, f.name, f.url, f.created_at, f.updated_at, f.user_id, f.last_fetched_at, COUNT(ff.feed_id) AS follows_count FROM feeds f
+LEFT JOIN feed_follows ff ON f.id = ff.feed_id
+GROUP BY f.id
+ORDER BY follows_count DESC, created_at DESC
 `
 
-func (q *Queries) GetAllFeeds(ctx context.Context) ([]Feed, error) {
+type GetAllFeedsRow struct {
+	ID            uuid.UUID
+	Name          string
+	Url           string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	UserID        uuid.UUID
+	LastFetchedAt sql.NullTime
+	FollowsCount  sql.NullInt64
+}
+
+func (q *Queries) GetAllFeeds(ctx context.Context) ([]GetAllFeedsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getAllFeeds)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Feed
+	var items []GetAllFeedsRow
 	for rows.Next() {
-		var i Feed
+		var i GetAllFeedsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -80,6 +94,7 @@ func (q *Queries) GetAllFeeds(ctx context.Context) ([]Feed, error) {
 			&i.UpdatedAt,
 			&i.UserID,
 			&i.LastFetchedAt,
+			&i.FollowsCount,
 		); err != nil {
 			return nil, err
 		}
@@ -97,7 +112,7 @@ func (q *Queries) GetAllFeeds(ctx context.Context) ([]Feed, error) {
 const getFeedsByUserID = `-- name: GetFeedsByUserID :many
 SELECT id, name, url, created_at, updated_at, user_id, last_fetched_at FROM feeds
 WHERE user_id = $1
-ORDER BY created_at DESC
+ORDER BY created_at ASC
 `
 
 func (q *Queries) GetFeedsByUserID(ctx context.Context, userID uuid.UUID) ([]Feed, error) {

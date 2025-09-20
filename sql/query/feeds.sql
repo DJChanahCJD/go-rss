@@ -12,15 +12,16 @@ VALUES (
 )
 RETURNING *;
 
-
 -- name: GetAllFeeds :many
-SELECT * FROM feeds
-ORDER BY created_at DESC;
+SELECT f.*, COUNT(ff.feed_id) AS follows_count FROM feeds f
+LEFT JOIN feed_follows ff ON f.id = ff.feed_id
+GROUP BY f.id
+ORDER BY follows_count DESC, created_at DESC;
 
 -- name: GetFeedsByUserID :many
 SELECT * FROM feeds
 WHERE user_id = $1
-ORDER BY created_at DESC;
+ORDER BY created_at ASC;
 
 -- name: GetNextFeedsToFetch :many
 SELECT * FROM feeds

@@ -68,10 +68,12 @@ func setupRouter(apiCfg handlers.ApiConfig) *chi.Mux {
 	v1Router.Get("/healthz", handlers.HealthzHandler) //  检查服务是否准备好
 
 	v1Router.Post("/users", apiCfg.CreateUser)
+	v1Router.Post("/users/login", apiCfg.LoginUser)
 	v1Router.Get("/users", apiCfg.AuthMiddleware(apiCfg.GetUser))
 
 	v1Router.Post("/feeds", apiCfg.AuthMiddleware(apiCfg.CreateFeed))
 	v1Router.Get("/feeds", apiCfg.GetAllFeeds)
+    v1Router.Get("/feeds/by-user", apiCfg.AuthMiddleware(apiCfg.GetFeedsByUser))    // 获取用户创建的订阅源
 
 	v1Router.Post("/feed_follows", apiCfg.AuthMiddleware(apiCfg.CreateFeedFollows))
 	v1Router.Get("/feed_follows", apiCfg.AuthMiddleware(apiCfg.GetFeedFollowsByUser))

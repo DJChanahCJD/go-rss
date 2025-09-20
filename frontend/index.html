@@ -3,86 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSS阅读器</title>
-    <!-- 通过CDN引入jQuery -->
+    <title>RSS阅读器 - 简洁优雅的资讯聚合平台</title>
+    
+    <!-- 引入必要的库 -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <!-- 引入轻量级UI组件库 (这里使用Semantic UI作为示例) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+    
     <!-- 自定义样式 -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- 网站图标 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234299e1'><path d='M6 6h12v12H6z'/></svg>">
 </head>
 <body>
+    <!-- 主容器 -->
     <div class="ui container">
-        <!-- 顶部导航栏 -->
-        <div class="ui menu" id="navbar">
-            <div class="header item">RSS阅读器</div>
-            <a class="item" href="#" id="home-link">首页</a>
-            <a class="item" href="#" id="feeds-link">我的订阅</a>
+        
+        <!-- 导航栏 -->
+        <nav class="ui menu" id="navbar">
+            <a class="header item" href="#" id="home-link">
+                <i class="rss icon"></i>
+                RSS阅读器
+            </a>
+            
+            <a class="item" href="#" id="feeds-link">
+                <i class="list icon"></i>
+                我的订阅
+            </a>
+            
+            <a class="item" href="#" id="square-link">
+                <i class="compass icon"></i>
+                广场
+            </a>
+            
             <div class="right menu">
                 <div class="item" id="user-info" style="display: none;">
+                    <i class="user circle icon"></i>
                     <span id="welcome-message"></span>
                 </div>
-                <a class="item" href="#" id="login-link">登录</a>
-                <a class="item" href="#" id="register-link">注册</a>
-                <a class="item" href="#" id="logout-link" style="display: none;">退出</a>
+                
+                <a class="item" href="#" id="login-link">
+                    <i class="sign-in icon"></i>
+                    登录
+                </a>
+                
+                <a class="item" href="#" id="register-link">
+                    <i class="user plus icon"></i>
+                    注册
+                </a>
+                
+                <a class="item" href="#" id="logout-link" style="display: none;">
+                    <i class="sign-out icon"></i>
+                    退出
+                </a>
             </div>
-        </div>
+        </nav>
 
-        <!-- 主要内容区 -->
-        <div class="ui segment" id="content">
+        <!-- 内容区域 -->
+        <main class="ui segment" id="content">
+            
             <!-- 登录表单 -->
-            <div id="login-form" class="ui form">
-                <h2 class="ui header">用户登录</h2>
+            <section id="login-form" class="ui form">
+                <h2 class="ui header">
+                    <i class="sign-in icon"></i>
+                    用户登录
+                </h2>
+                
                 <div class="field">
                     <label>用户名</label>
-                    <input type="text" id="login-username" placeholder="请输入用户名">
+                    <div class="ui left icon input">
+                        <input type="text" id="login-username" placeholder="请输入用户名">
+                        <i class="user icon"></i>
+                    </div>
                 </div>
+                
                 <div class="field">
                     <label>密码</label>
-                    <input type="password" id="login-password" placeholder="请输入密码">
+                    <div class="ui left icon input">
+                        <input type="password" id="login-password" placeholder="请输入密码">
+                        <i class="lock icon"></i>
+                    </div>
                 </div>
-                <button class="ui button primary" id="login-btn">登录</button>
-            </div>
+                
+                <button class="ui button primary fluid" id="login-btn">
+                    <i class="sign-in icon"></i>
+                    登录
+                </button>
+            </section>
 
             <!-- 注册表单 -->
-            <div id="register-form" class="ui form" style="display: none;">
-                <h2 class="ui header">用户注册</h2>
+            <section id="register-form" class="ui form" style="display: none;">
+                <h2 class="ui header">
+                    <i class="user plus icon"></i>
+                    用户注册
+                </h2>
+                
                 <div class="field">
                     <label>用户名</label>
-                    <input type="text" id="register-username" placeholder="请输入用户名">
+                    <div class="ui left icon input">
+                        <input type="text" id="register-username" placeholder="请输入用户名">
+                        <i class="user icon"></i>
+                    </div>
                 </div>
+                
                 <div class="field">
                     <label>密码</label>
-                    <input type="password" id="register-password" placeholder="请输入密码">
+                    <div class="ui left icon input">
+                        <input type="password" id="register-password" placeholder="请输入密码">
+                        <i class="lock icon"></i>
+                    </div>
                 </div>
-                <button class="ui button primary" id="register-btn">注册</button>
-            </div>
+                
+                <button class="ui button primary fluid" id="register-btn">
+                    <i class="user plus icon"></i>
+                    注册
+                </button>
+            </section>
 
             <!-- 首页内容 -->
-            <div id="home-content" style="display: none;">
-                <h2 class="ui header">最新文章</h2>
-                <div class="ui action input" style="margin-bottom: 15px;">
-                    <input type="text" id="feed-url" placeholder="输入RSS订阅源URL">
-                    <button class="ui button primary" id="add-feed-btn">添加订阅</button>
-                </div>
+            <section id="home-content" style="display: none;">
+                <h2 class="ui header">
+                    <i class="newspaper icon"></i>
+                    最新文章
+                </h2>
+                
                 <div id="articles-container"></div>
-            </div>
+                
+                <!-- 分页控件 -->
+                <div id="pagination-controls"></div>
+            </section>
 
-            <!-- 订阅源列表 -->
-            <div id="feeds-content" style="display: none;">
-                <h2 class="ui header">我的订阅源</h2>
+            <!-- 订阅源管理 -->
+            <section id="feeds-content" style="display: none;">
+                <h2 class="ui header">
+                    <i class="list icon"></i>
+                    我的订阅源
+                </h2>
+                
+                <div class="ui action input fluid" style="margin-bottom: 25px;">
+                    <input type="text" id="feed-name" placeholder="订阅源名称">
+                    <input type="text" id="feed-url" placeholder="RSS订阅源URL">
+                    <button class="ui button primary" id="add-feed-btn">
+                        <i class="plus icon"></i>
+                        添加
+                    </button>
+                </div>
+                
                 <div id="feeds-container"></div>
-            </div>
-        </div>
+            </section>
+
+            <!-- 广场发现 -->
+            <section id="square-content" style="display: none;">
+                <h2 class="ui header">
+                    <i class="compass icon"></i>
+                    订阅源广场
+                </h2>
+                
+                <p class="ui text muted">
+                    <i class="info circle icon"></i>
+                    发现更多有趣的订阅源，按关注数排序
+                </p>
+                
+                <div id="square-feeds-container"></div>
+            </section>
+        </main>
     </div>
+
+
 
     <!-- 消息提示 -->
     <div class="ui message" id="notification" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000;">
         <p id="notification-message"></p>
     </div>
 
-    <!-- 自定义脚本 -->
-    <script src="/static/js/app.js"></script>
+    <!-- 主应用脚本 -->
+    <script src="/static/app.js"></script>
 </body>
 </html>

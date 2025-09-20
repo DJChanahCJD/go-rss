@@ -20,6 +20,7 @@ SELECT * FROM feed_follows
 ORDER BY created_at DESC;
 
 -- name: GetFeedFollowsByUserID :many
-SELECT * FROM feed_follows
-WHERE user_id = $1
+SELECT ff.*, feeds.name as feed_name, feeds.url as feed_url FROM feed_follows ff
+JOIN feeds ON ff.feed_id = feeds.id
+WHERE ff.user_id = $1
 ORDER BY created_at DESC;
